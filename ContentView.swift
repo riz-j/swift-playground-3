@@ -64,7 +64,7 @@ final class Service: ObservableObject {
                         let decoder = JSONDecoder()
                         let message: Message = try decoder.decode(Message.self, from: jsonData)
                         DispatchQueue.main.async {
-                            self.Messages.append(message)
+                            self.dataStore.messages.append(message)
                             
                             print("---------------------------")
                             print(" _id: \(message.id)")
@@ -146,6 +146,7 @@ struct ContentView: View {
                                         .fill(Color.pink)
                                         .frame(width: 2), alignment: .leading
                                 )
+                            //Text(msg.sender)
                         }
                         if (msg.type == "user_join_notice") {
                             Text(msg.message)

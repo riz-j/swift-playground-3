@@ -48,6 +48,9 @@ final class Service: ObservableObject {
                         self.dataStore = dataParcel
                         
                         print(dataParcel)
+                        
+                        print("------------- OOOO ---------------")
+                        print(self.dataStore.users)
                     }
                 } catch {
                     print("Error deserializing data store: \(error)")
@@ -125,13 +128,30 @@ struct ContentView: View {
                     .fill(Color.gray .opacity(0.2))
                     .frame(height: 1), alignment: .bottom
             )
-
+            
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     // Iterate over the messages object
                     ForEach(service.dataStore.messages.indices, id: \.self) { index in
+                        let prevMsg = index > 0 ? service.dataStore.messages[index-1] : nil
                         let msg = service.dataStore.messages[index]
+                        let sender = service.dataStore.users.first(where: {$0.id == msg.id})
+                        //print("SENDERRR: " + sender)
+                        
+                        
+                        //if let sender = service.dataStore.users.first(where: { $0.id == msg.id }) {
+                        //    let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
+                       //     if isDifferentSender {
+                        sender != nil ? Text("\(sender!.displayName)") : Text("SMT")
+                        //    }
+                        //}
+                        //let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
+
+                        //if isDifferentSender {
+                        //    Text("\(sender.displayName)")
+                        //}
+                        
                         HStack {
                             Spacer()
                         }

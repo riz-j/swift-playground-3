@@ -27,13 +27,13 @@ struct Message: Identifiable, Codable {
 }
 
 struct DataStore: Decodable {
-    // var currentUser: IUser
+    var currentUser: IUser
     // var rooms: [RoomVM]
     var users: [UserVM]
     var messages: [Message]
     
     init() {
-        // self.currentUser = IUser() // provide a default value
+        self.currentUser = IUser(id: "", displayName: "", displayColor: "") // provide a default value
         // self.rooms = [] // empty array
         self.users = [] // empty array
         self.messages = [] // empty array

@@ -24,6 +24,7 @@ final class Service: ObservableObject {
     
     @Published var Messages = [Message]()
     @Published var messages = [String]()
+    @Published var dataStore = DataStore()
         
     init() {
         let socket = manager.defaultSocket
@@ -33,7 +34,25 @@ final class Service: ObservableObject {
             print(" Connected to WS server!")
             print("-------------------------")
             socket.emit("on_ping");
+            socket.emit("on_request_lan_parcel");
             socket.emit("on_join_lan_room");
+        }
+        
+        socket.on("onParcel") { (data, ack) in
+            if let rawData = data[0] as? [String: Any] {
+                do {
+                    let jsonData = try JSONSerialization.data(withJSONObject: rawData, options: [])
+                    let decoder = JSONDecoder()
+                    let dataParcel: DataStore = try decoder.decode(DataStore.self, from: jsonData)
+                    DispatchQueue.main.async {
+                        self.dataStore = dataParcel
+                        
+                        print(dataParcel)
+                    }
+                } catch {
+                    print("Error deserializing data store: \(error)")
+                }
+            }
         }
         
         
@@ -111,8 +130,8 @@ struct ContentView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     // Iterate over the messages object
-                    ForEach(service.Messages.indices, id: \.self) { index in
-                        let msg = service.Messages[index]
+                    ForEach(service.dataStore.messages.indices, id: \.self) { index in
+                        let msg = service.dataStore.messages[index]
                         HStack {
                             Spacer()
                         }

@@ -1,0 +1,201 @@
+//
+//  ContentView.swift
+//  playground-2
+//
+//  Created by Rizki Judojono on 14/3/2023.
+//
+
+import SwiftUI
+import SocketIO
+
+
+final class Service: ObservableObject {
+
+    
+    public var manager = SocketManager(socketURL: URL(string: "ws://170.64.176.135:8088")!, config: [
+            .log(true),
+            .compress,
+            .connectParams([
+                "USER_ID": "j23n41-n3j2n1-4jn3j1-23n1j2",
+                "LAN_ROOM": "PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU"
+                //"LAN_ROOM": "PUBLIC_LAN__49_MONASHUNI-AU-AS-AP_AU"
+            ])
+    ])
+    
+    @Published var Messages = [Message]()
+    @Published var messages = [String]()
+        
+    init() {
+        let socket = manager.defaultSocket
+        
+        socket.on(clientEvent: .connect) { (data, ack) in
+            print("-------------------------")
+            print(" Connected to WS server!")
+            print("-------------------------")
+            socket.emit("on_ping");
+            socket.emit("on_join_lan_room");
+        }
+        
+        
+        
+        socket.on("onMessage") { (data, ack) in
+            if let rawData = data[0] as? [String: Any] {
+                    do {
+                        let jsonData = try JSONSerialization.data(withJSONObject: rawData, options: [])
+                        let decoder = JSONDecoder()
+                        let message: Message = try decoder.decode(Message.self, from: jsonData)
+                        DispatchQueue.main.async {
+                            self.Messages.append(message)
+                            
+                            print("---------------------------")
+                            print(" _id: \(message.id)")
+                            print(" Message: \(message.message)")
+                            print(" Sender: \(message.sender)")
+                            print("---------------------------")
+                            }
+                    } catch {
+                        print("Error deserializing message data: \(error)")
+                    }
+                }
+        }
+        
+        
+        /*
+        socket.on(clientEvent: .connect) { (data, ack) in
+            print("Connected!")
+            socket.emit("my_event", "Hey this is iPhone! Nanana!")
+            
+            socket.emit("join", ["room": "room2"])
+        }
+        
+        socket.on("my_response") { [weak self] (data, ack) in
+            if let data = data[0] as? [String: String],
+               let rawMessage = data["response"] {
+                DispatchQueue.main.async {
+                    self?.messages.append(rawMessage)
+                }
+            }
+        }
+         */
+        socket.connect()
+    }
+}
+
+
+struct ContentView: View {
+    @ObservedObject var service = Service()
+    private var socket: SocketIOClient { return service.manager.defaultSocket }
+    private var roomName: String = "room2"
+    @State private var messageInput: String = ""
+    
+    var body: some View {
+        VStack {
+            VStack {
+                HStack {
+                    Text("LAN Chat")
+                        .font(.title2)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                .padding()
+            }
+            .frame(height: 50)
+            .background(Color.white)
+            .overlay(
+                Rectangle()
+                    .fill(Color.gray .opacity(0.2))
+                    .frame(height: 1), alignment: .bottom
+            )
+
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 0) {
+                    // Iterate over the messages object
+                    ForEach(service.Messages.indices, id: \.self) { index in
+                        let msg = service.Messages[index]
+                        HStack {
+                            Spacer()
+                        }
+                        if (msg.type == "text") {
+                            Text(msg.message)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .listRowSeparator(.hidden)
+                            //.frame(height: 30)
+                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
+                                .overlay(
+                                    Rectangle()
+                                        .fill(Color.pink)
+                                        .frame(width: 2), alignment: .leading
+                                )
+                        }
+                        if (msg.type == "user_join_notice") {
+                            Text(msg.message)
+                                .font(.callout)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .listRowSeparator(.hidden)
+                                .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
+                                .foregroundColor(Color.gray)
+                            
+                        }
+                    }
+                }
+                .padding(10)
+            }
+            
+            
+            HStack {
+                TextField("Send Message", text: $messageInput)
+                    .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
+                    .frame(height: 45)
+                    .background(Color.gray .opacity(0.15))
+                    .cornerRadius(.infinity)
+                    
+                Button(action: {
+                    let uuid = UUID().uuidString
+                    
+                    let dateFormatter = ISO8601DateFormatter()
+                    let dateNow = Date()
+                    let isoDateString = dateFormatter.string(from: dateNow)
+                    
+                    socket.emit("on_message", [
+                        "_id": uuid,
+                        "type": "text",
+                        "message": messageInput,
+                        "timestamp": isoDateString,
+                        "sender": "j23n41-n3j2n1-4jn3j1-23n1j2",
+                        "room": "PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU"
+                    ])
+                    
+                    messageInput = ""
+                    
+                }, label: {
+                    Image(systemName: "paperplane")
+                        .font(.title2)
+                        .frame(width: 35)
+                })
+                
+                //Button("Send ") {
+                //    socket.emit("room_event", ["data": messageInput, "room": roomName])
+                //}
+            }
+            .padding()
+            .background(Color.white)
+            .overlay(
+                Rectangle()
+                    .fill(Color.gray .opacity(0.2))
+                    .frame(height: 1), alignment: .top
+            )
+            
+            //Spacer()
+        }
+        .background(Color.white)
+    }
+    
+}
+
+struct ContentView_Previews: PreviewProvider {
+    static var previews: some View {
+        ContentView()
+    }
+}
+

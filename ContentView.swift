@@ -18,7 +18,6 @@ final class Service: ObservableObject {
             .connectParams([
                 "USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
                 "LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
-                //"LAN_ROOM": "PUBLIC_LAN__49_MONASHUNI-AU-AS-AP_AU"
             ])
     ])
     

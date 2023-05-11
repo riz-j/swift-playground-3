@@ -9,15 +9,19 @@ import SwiftUI
 import SocketIO
 
 
-final class Service: ObservableObject {
 
+final class Service: ObservableObject {
+    let defaults = UserDefaults.standard
+
+    let user_id = UserDefaults.standard.string(forKey: "USER_ID")
+    let lan_room = UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")
     
-    public var manager = SocketManager(socketURL: URL(string: "ws://170.64.176.135:8088")!, config: [
+    public lazy var manager = SocketManager(socketURL: URL(string: "ws://170.64.176.135:8088")!, config: [
             .log(true),
             .compress,
             .connectParams([
-                "USER_ID": "j23n41-n3j2n1-4jn3j1-23n1j2",
-                "LAN_ROOM": "PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU"
+                "USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
+                "LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
                 //"LAN_ROOM": "PUBLIC_LAN__49_MONASHUNI-AU-AS-AP_AU"
             ])
     ])
@@ -27,6 +31,9 @@ final class Service: ObservableObject {
     @Published var dataStore = DataStore()
         
     init() {
+        defaults.set("j23n41-n3j2n1-4jn3j1-23n1j2", forKey: "USER_ID")
+        defaults.set("PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU", forKey: "PUB_LAN_ROOM")
+        
         let socket = manager.defaultSocket
         
         socket.on(clientEvent: .connect) { (data, ack) in
@@ -161,7 +168,6 @@ struct ContentView: View {
                                     .foregroundColor(Color.pink)
                                     .padding(.top, 10)
                             }
-                            
                             Text(msg.message)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .listRowSeparator(.hidden)

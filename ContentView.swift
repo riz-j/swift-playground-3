@@ -110,6 +110,7 @@ struct ContentView: View {
     private var roomName: String = "room2"
     @State private var messageInput: String = ""
     
+    
     var body: some View {
         VStack {
             VStack {
@@ -128,45 +129,55 @@ struct ContentView: View {
                     .fill(Color.gray .opacity(0.2))
                     .frame(height: 1), alignment: .bottom
             )
-            
-            
+                        
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     // Iterate over the messages object
                     ForEach(service.dataStore.messages.indices, id: \.self) { index in
                         let prevMsg = index > 0 ? service.dataStore.messages[index-1] : nil
                         let msg = service.dataStore.messages[index]
-                        let sender = service.dataStore.users.first(where: {$0.id == msg.id})
-                        //print("SENDERRR: " + sender)
-                        
+                        let sender = service.dataStore.users.first(where: {$0.id == msg.sender})
+                        //let rawDisplayColor = sender?.displayColor ?? "ef4444"
+                        //let hexDisplayColor = rawDisplayColor.replaceOccurrences(of: "#", with: "")
+
                         
                         //if let sender = service.dataStore.users.first(where: { $0.id == msg.id }) {
                         //    let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
                        //     if isDifferentSender {
-                        sender != nil ? Text("\(sender!.displayName)") : Text("SMT")
+                        //sender != nil ? Text("\(sender!.displayName)") : Text("SMT")
                         //    }
                         //}
-                        //let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
-
-                        //if isDifferentSender {
-                        //    Text("\(sender.displayName)")
-                        //}
+                        
                         
                         HStack {
                             Spacer()
                         }
                         if (msg.type == "text") {
+                            //Text(sender?.displayName ?? "unknown")
+                            let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
+                            if isDifferentSender {
+                                
+                                Text("\(sender?.displayName ?? "unknown")")
+                                    .foregroundColor(Color.pink)
+                                    .padding(.top, 10)
+                            }
+                            
                             Text(msg.message)
                                 .fixedSize(horizontal: false, vertical: true)
                                 .listRowSeparator(.hidden)
-                            //.frame(height: 30)
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
                                 .overlay(
                                     Rectangle()
                                         .fill(Color.pink)
                                         .frame(width: 2), alignment: .leading
                                 )
-                            //Text(msg.sender)
+                                .swipeActions {
+                                    Button(action: {
+                                        print("Nooice")
+                                    }, label: {
+                                        Text("")
+                                    })
+                                }
                         }
                         if (msg.type == "user_join_notice") {
                             Text(msg.message)

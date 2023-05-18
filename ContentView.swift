@@ -26,8 +26,9 @@ final class Service: ObservableObject {
     @Published var dataStore = DataStore()
         
     init() {
-        if (UserDefaults.standard.string(forKey: "USER_ID")!.isEmpty) {
-            UserDefaults.standard.set(UUID(), forKey: "USER_ID")
+        if let user_id = UserDefaults.standard.string(forKey: "USER_ID") {
+        } else {
+            UserDefaults.standard.set(UUID().uuidString, forKey: "USER_ID")
         }
         UserDefaults.standard.set("PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU", forKey: "PUB_LAN_ROOM")
         
@@ -190,6 +191,30 @@ struct ContentView: View {
                                 .padding(EdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0))
                                 .foregroundColor(Color.gray)
                             
+                        }
+                        if (msg.type == "image") {
+                            HStack {
+                                AsyncImage(url: URL(string: msg.url)) { phase in
+                                    switch phase {
+                                    case .success(let image):
+                                        image.resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(height: UIScreen.main.bounds.height * 0.4)
+                                    case .empty:
+                                        Text("Loading Image...")
+                                    case .failure(_):
+                                        Text("Image fetch failed")
+                                    @unknown default:
+                                        Text("No Image")
+                                    }
+                                }
+                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
+                                .overlay(
+                                    Rectangle()
+                                        .fill(Color.pink)
+                                        .frame(width: 2), alignment: .leading
+                                )
+                            }
                         }
                     }
                 }

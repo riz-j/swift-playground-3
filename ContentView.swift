@@ -218,10 +218,16 @@ struct ContentView: View {
                             }
                         }
                         if (msg.type == "file") {
-                            Text(msg.filename)
+                            //Text(msg.filename)
                             //HStack {
-                            VideoPlayer(player: AVPlayer(url:  URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!))
-                                .frame(height: 400)
+                            VideoPlayer(player: AVPlayer(url:  URL(string: msg.url)!))
+                                .frame(height: 205)
+                                .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
+                                .overlay(
+                                    Rectangle()
+                                        .fill(Color.pink)
+                                        .frame(width: 2), alignment: .leading
+                                )
 
                             //        }
                                 //.padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))

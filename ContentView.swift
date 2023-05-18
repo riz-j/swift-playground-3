@@ -114,7 +114,7 @@ struct ContentView: View {
     private var socket: SocketIOClient { return service.manager.defaultSocket }
     private var roomName: String = "room2"
     @State private var messageInput: String = ""
-    @State var player = AVPlayer()
+    @State var player = AVPlayer(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
     
     
     var body: some View {
@@ -219,18 +219,18 @@ struct ContentView: View {
                         }
                         if (msg.type == "file") {
                             Text(msg.filename)
-                            HStack {
-                                VideoPlayer(player: player)
-                                    .onAppear() {
-                                        player = AVPlayer(url: URL(string: msg.url)!)
-                                }
+                            //HStack {
+                            VideoPlayer(player: AVPlayer(url:  URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!))
+                                .frame(height: 400)
+
+                            //        }
                                 //.padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
                                 //.overlay(
                                 // Rectangle()
                                 //        .fill(Color.pink)
                                 //       .frame(width: 2), alignment: .leading
                                 //)
-                            }
+                            
                         }
                     }
                 }

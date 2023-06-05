@@ -12,12 +12,14 @@ import AVKit
 
 final class Service: ObservableObject {
     
-    public lazy var manager = SocketManager(socketURL: URL(string: "ws://170.64.176.135:8088")!, config: [
+    public lazy var manager = SocketManager(socketURL: URL(string: "https://ws.copager.com")!, config: [
             .log(true),
             .compress,
             .connectParams([
-                "USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
-                "LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
+                //"USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
+                //"LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
+                "USER_ID": "j23n41-n3j2n1-4jn3j1-23n1j2",
+                "LAN_ROOM": "PUBLIC_LAN__49"
             ])
     ])
     
@@ -30,7 +32,7 @@ final class Service: ObservableObject {
         } else {
             UserDefaults.standard.set(UUID().uuidString, forKey: "USER_ID")
         }
-        UserDefaults.standard.set("PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU", forKey: "PUB_LAN_ROOM")
+        UserDefaults.standard.set("PUBLIC_LAN__49", forKey: "PUB_LAN_ROOM")
         
         let socket = manager.defaultSocket
         
@@ -114,7 +116,7 @@ struct ContentView: View {
     private var socket: SocketIOClient { return service.manager.defaultSocket }
     private var roomName: String = "room2"
     @State private var messageInput: String = ""
-    @State var player = AVPlayer(url: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
+    //@State var player = AVPlayer(url: URL(string: //"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
     
     
     var body: some View {
@@ -217,7 +219,7 @@ struct ContentView: View {
                                 )
                             }
                         }
-                        if (msg.type == "file") {
+                        if (msg.type == "video") {
                             //Text(msg.filename)
                             //HStack {
                             VideoPlayer(player: AVPlayer(url:  URL(string: msg.url)!))
@@ -264,7 +266,7 @@ struct ContentView: View {
                         "message": messageInput,
                         "timestamp": isoDateString,
                         "sender": "j23n41-n3j2n1-4jn3j1-23n1j2",
-                        "room": "PUBLIC_LAN__118_MONASHUNI-AU-AS-AP_AU"
+                        "room": "PUBLIC_LAN__49"
                     ])
                     
                     messageInput = ""

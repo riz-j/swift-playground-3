@@ -11,28 +11,45 @@ import AVKit
 
 
 final class Service: ObservableObject {
+    @Published var PubLanRoom: String = ""
+    //@Published var manager: SocketManager?
+    
     
     public lazy var manager = SocketManager(socketURL: URL(string: "https://ws.copager.com")!, config: [
             .log(true),
             .compress,
             .connectParams([
-                //"USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
-                //"LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
-                "USER_ID": "j23n41-n3j2n1-4jn3j1-23n1j2",
-                "LAN_ROOM": "PUBLIC_LAN__49"
+                //"USER_ID": "j23n41-n3j2n1-4jn3j1-23n1j2",
+                "USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
+                "LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
+                
+                //"LAN_ROOM": "PUBLIC_LAN__49"
             ])
     ])
+     
+    
+    
     
     @Published var Messages = [Message]()
     @Published var messages = [String]()
     @Published var dataStore = DataStore()
         
     init() {
-        if let user_id = UserDefaults.standard.string(forKey: "USER_ID") {
-        } else {
-            UserDefaults.standard.set(UUID().uuidString, forKey: "USER_ID")
+        
+        GetIpAddress() { ip in
+            let _PubLanRoom = BuildLanRoom(ipAddr: ip)
+                print("IP ADDRESSSSSSSS: \(self.PubLanRoom)")
+
+            if let user_id = UserDefaults.standard.string(forKey: "USER_ID") {
+            } else {
+                UserDefaults.standard.set(UUID().uuidString, forKey: "USER_ID")
+            }
+            
+            UserDefaults.standard.set(_PubLanRoom, forKey: "PUB_LAN_ROOM")
         }
-        UserDefaults.standard.set("PUBLIC_LAN__49", forKey: "PUB_LAN_ROOM")
+         
+        
+        
         
         let socket = manager.defaultSocket
         
@@ -265,8 +282,8 @@ struct ContentView: View {
                         "type": "text",
                         "message": messageInput,
                         "timestamp": isoDateString,
-                        "sender": "j23n41-n3j2n1-4jn3j1-23n1j2",
-                        "room": "PUBLIC_LAN__49"
+                        "sender": UserDefaults.standard.string(forKey: "USER_ID")!,
+                        "room": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
                     ])
                     
                     messageInput = ""

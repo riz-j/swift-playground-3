@@ -162,6 +162,7 @@ struct ContentView: View {
                         let prevMsg = index > 0 ? service.dataStore.messages[index-1] : nil
                         let msg = service.dataStore.messages[index]
                         let sender = service.dataStore.users.first(where: {$0.id == msg.sender})
+                        //print("SomeBodyOnceToldMe: \(sender?.displayColor)")
                         //let rawDisplayColor = sender?.displayColor ?? "ef4444"
                         //let hexDisplayColor = rawDisplayColor.replaceOccurrences(of: "#", with: "")
 
@@ -183,8 +184,12 @@ struct ContentView: View {
                             if isDifferentSender {
                                 
                                 Text("\(sender?.displayName ?? "unknown")")
-                                    .foregroundColor(Color.pink)
+                                    .foregroundColor(Color(hex: "\(sender?.displayColor ?? "#FF0000")"))
                                     .padding(.top, 10)
+                                
+                                /* Text("\(sender?.displayColor ?? "#FF0000")")
+                                    .foregroundColor(Color.pink)
+                                    .padding(.top, 10) */
                             }
                             Text(msg.message)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -192,7 +197,7 @@ struct ContentView: View {
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
                                 .overlay(
                                     Rectangle()
-                                        .fill(Color.pink)
+                                        .fill(Color(hex: "\(sender?.displayColor ?? "#FF0000")"))
                                         .frame(width: 2), alignment: .leading
                                 )
                                 .swipeActions {
@@ -231,7 +236,7 @@ struct ContentView: View {
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
                                 .overlay(
                                     Rectangle()
-                                        .fill(Color.pink)
+                                        .fill(Color(hex: "\(sender?.displayColor ?? "#FF0000")"))
                                         .frame(width: 2), alignment: .leading
                                 )
                             }
@@ -244,7 +249,7 @@ struct ContentView: View {
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
                                 .overlay(
                                     Rectangle()
-                                        .fill(Color.pink)
+                                        .fill(Color(hex: "\(sender?.displayColor ?? "#FF0000")"))
                                         .frame(width: 2), alignment: .leading
                                 )
 

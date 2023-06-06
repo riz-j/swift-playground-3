@@ -50,7 +50,6 @@ struct ChatView: View {
                             Spacer()
                         }
                         if (msg.type == "text") {
-                            //Text(sender?.displayName ?? "unknown")
                             let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
                             if isDifferentSender {
                                 
@@ -168,10 +167,6 @@ struct ChatView: View {
                         .font(.title2)
                         .frame(width: 35)
                 })
-                
-                //Button("Send ") {
-                //    socket.emit("room_event", ["data": messageInput, "room": roomName])
-                //}
             }
             .padding()
             .background(Color.white)

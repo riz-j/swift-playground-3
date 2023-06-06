@@ -11,12 +11,16 @@ import SwiftUI
 import AVKit
 
 struct ChatView: View {
+    @ObservedObject var global: Global
     @ObservedObject var service = Service()
     private var socket: SocketIOClient { return service.manager.defaultSocket }
     private var roomName: String = "room2"
     @State private var messageInput: String = ""
     //@State var player = AVPlayer(url: URL(string: //"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
     
+    init(global: Global) {
+        self.global = global
+    }
     
     var body: some View {
         VStack {
@@ -136,7 +140,12 @@ struct ChatView: View {
             
             
             HStack {
-                Text("Upload Image")
+                Button(action: {
+                    self.global.currentView = "imagePicker"
+                }, label: {
+                    Text("Upload Image")
+                })
+
                 
                 TextField("Send Message", text: $messageInput)
                     .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))

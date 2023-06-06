@@ -9,12 +9,20 @@ import SwiftUI
 import SocketIO
 import AVKit
 
-
-
+class Global: ObservableObject {
+    @Published var currentView = "chat"
+}
 
 struct ContentView: View {
+    @StateObject var global = Global()
+    
     var body: some View {
-        ChatView()
+        if global.currentView == "chat" {
+            ChatView(global: global)
+        } else if global.currentView == "imagePicker" {
+            ImageUploadView(global: global)
+        }
+        
     }
     
 }

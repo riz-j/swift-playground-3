@@ -44,17 +44,6 @@ struct ChatView: View {
                         let prevMsg = index > 0 ? service.dataStore.messages[index-1] : nil
                         let msg = service.dataStore.messages[index]
                         let sender = service.dataStore.users.first(where: {$0.id == msg.sender})
-                        //print("SomeBodyOnceToldMe: \(sender?.displayColor)")
-                        //let rawDisplayColor = sender?.displayColor ?? "ef4444"
-                        //let hexDisplayColor = rawDisplayColor.replaceOccurrences(of: "#", with: "")
-
-                        
-                        //if let sender = service.dataStore.users.first(where: { $0.id == msg.id }) {
-                        //    let isDifferentSender = prevMsg.map { $0.sender != msg.sender } ?? true
-                       //     if isDifferentSender {
-                        //sender != nil ? Text("\(sender!.displayName)") : Text("SMT")
-                        //    }
-                        //}
                         
                         
                         HStack {
@@ -69,9 +58,6 @@ struct ChatView: View {
                                     .foregroundColor(Color(hex: "\(sender?.displayColor ?? "#FF0000")"))
                                     .padding(.top, 10)
                                 
-                                /* Text("\(sender?.displayColor ?? "#FF0000")")
-                                    .foregroundColor(Color.pink)
-                                    .padding(.top, 10) */
                             }
                             Text(msg.message)
                                 .fixedSize(horizontal: false, vertical: true)

@@ -7,6 +7,9 @@
 
 import Foundation
 
+// "https://api.ipify.org?format=json"
+// "https://jsonip.com"
+
 func GetIpAddress(completion: @escaping (String) -> Void) {
     let url = URL(string: "https://api.ipify.org?format=json")!
     

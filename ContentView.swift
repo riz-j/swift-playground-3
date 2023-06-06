@@ -38,7 +38,8 @@ final class Service: ObservableObject {
         
         GetIpAddress() { ip in
             let _PubLanRoom = BuildLanRoom(ipAddr: ip)
-                print("IP ADDRESSSSSSSS: \(self.PubLanRoom)")
+                //print("IP ADDRESSSSSSSS: \(self.PubLanRoom)")
+            print("IP ADDRESSSSSSSS: \(_PubLanRoom)")
 
             if let user_id = UserDefaults.standard.string(forKey: "USER_ID") {
             } else {

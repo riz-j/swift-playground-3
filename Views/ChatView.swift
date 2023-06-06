@@ -12,14 +12,16 @@ import AVKit
 
 struct ChatView: View {
     @ObservedObject var global: Global
-    @ObservedObject var service = Service()
+    //@ObservedObject var service = Service()
+    @ObservedObject var service: Service
     private var socket: SocketIOClient { return service.manager.defaultSocket }
     private var roomName: String = "room2"
     @State private var messageInput: String = ""
     //@State var player = AVPlayer(url: URL(string: //"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
     
-    init(global: Global) {
+    init(global: Global, service: Service) {
         self.global = global
+        self.service = service
     }
     
     var body: some View {

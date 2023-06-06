@@ -15,12 +15,14 @@ class Global: ObservableObject {
 
 struct ContentView: View {
     @StateObject var global = Global()
+    @StateObject var service = Service()
+
     
     var body: some View {
         if global.currentView == "chat" {
-            ChatView(global: global)
+            ChatView(global: global, service: service)
         } else if global.currentView == "imagePicker" {
-            ImageUploadView(global: global)
+            ImageUploadView(global: global, service: service)
         }
         
     }

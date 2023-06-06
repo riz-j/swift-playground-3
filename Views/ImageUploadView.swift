@@ -6,9 +6,13 @@
 //
 
 import SwiftUI
+import SocketIO
 
 struct ImageUploadView: View {
     @ObservedObject var global: Global
+    @ObservedObject var service: Service
+    private var socket: SocketIOClient { return service.manager.defaultSocket }
+    
     @State private var image: Image?
     @State private var filterIntensity = 0.5
     
@@ -70,6 +74,22 @@ struct ImageUploadView: View {
             if let url = url {
                 // URL acquired. Now perform action:
                 
+                let uuid = UUID().uuidString
+                
+                let dateFormatter = ISO8601DateFormatter()
+                let dateNow = Date()
+                let isoDateString = dateFormatter.string(from: dateNow)
+                
+                socket.emit("on_message", [
+                    "_id": uuid,
+                    "type": "image",
+                    "message": "",
+                    "url": url,
+                    "timestamp": isoDateString,
+                    "sender": UserDefaults.standard.string(forKey: "USER_ID")!,
+                    "room": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!,
+                    "filename": uuid
+                ])
                 
                 print ("Go the URL Bro: \(url)")
                 global.currentView = "chat"

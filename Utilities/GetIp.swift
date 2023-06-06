@@ -11,7 +11,7 @@ import Foundation
 // "https://jsonip.com"
 
 func GetIpAddress(completion: @escaping (String) -> Void) {
-    let url = URL(string: "https://api.ipify.org?format=json")!
+    let url = URL(string: "https://jsonip.com")!
     
     let task = URLSession.shared.dataTask(with: url) { (data, response, error) in
         if let error = error {

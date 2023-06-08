@@ -21,8 +21,12 @@ struct ContentView: View {
     var body: some View {
         if global.currentView == "chat" {
             ChatView(global: global, service: service)
+            
         } else if global.currentView == "imagePicker" {
             ImageUploadView(global: global, service: service)
+            
+        } else if (global.currentView == "acknowledgement") {
+            AcknowledgementView(global: global)
         }
         
     }

@@ -32,6 +32,12 @@ struct ChatView: View {
                         .font(.title2)
                         .fontWeight(.bold)
                     Spacer()
+                    Image(systemName: "info.circle")
+                        .font(.title3)
+                        .foregroundColor(.blue)
+                        .onTapGesture {
+                            global.currentView = "acknowledgement"
+                        }
                 }
                 .padding()
             }

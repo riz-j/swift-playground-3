@@ -9,6 +9,13 @@ import SwiftUI
 import SocketIO
 import AVKit
 
+/*
+ Define a class for a Global object that can be
+ observed throughout the app. This class has a published
+ state "currentView" that can be observed and manipulated
+ throughout the codebase to change the currentView of the user.
+ */
+
 class Global: ObservableObject {
     @Published var currentView = "chat"
 }

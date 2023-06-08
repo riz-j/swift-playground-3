@@ -8,6 +8,15 @@
 import SwiftUI
 import SocketIO
 
+/*
+ 
+ This is the ImageUploadView. User can select and image, upload it to the cloud,
+ and send the URL string as a reference to the image.
+ 
+ Source: https://www.hackingwithswift.com/books/ios-swiftui/importing-an-image-into-swiftui-using-phpickerviewcontroller
+ 
+ */
+
 struct ImageUploadView: View {
     @ObservedObject var global: Global
     @ObservedObject var service: Service

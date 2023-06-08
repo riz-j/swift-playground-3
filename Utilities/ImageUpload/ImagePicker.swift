@@ -9,6 +9,15 @@ import Foundation
 import PhotosUI
 import SwiftUI
 
+/*
+ 
+ This is the ImagePicker which accesses the user's file system in order to pick the images
+ that they would like to send.
+ 
+ Source: https://www.hackingwithswift.com/books/ios-swiftui/importing-an-image-into-swiftui-using-phpickerviewcontroller
+ 
+ */
+
 struct ImagePicker: UIViewControllerRepresentable {
     @Binding var image: UIImage?
 

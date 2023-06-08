@@ -10,14 +10,23 @@ import SocketIO
 import SwiftUI
 import AVKit
 
+/*
+ 
+ This is the ChatView. This View is responsible for displaying all messages
+ (text, image, video). It also contains the TextBox where users can type messages,
+  send messages, and upload images.
+ 
+ This View accepts a WebSocket Service object and a Global object, and when
+ there are changes in those objects, it will be reflected in the User Interface.
+ 
+ */
+
 struct ChatView: View {
     @ObservedObject var global: Global
-    //@ObservedObject var service = Service()
     @ObservedObject var service: Service
     private var socket: SocketIOClient { return service.manager.defaultSocket }
     private var roomName: String = "room2"
     @State private var messageInput: String = ""
-    //@State var player = AVPlayer(url: URL(string: //"https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4")!)
     
     init(global: Global, service: Service) {
         self.global = global
@@ -121,8 +130,7 @@ struct ChatView: View {
                             }
                         }
                         if (msg.type == "video") {
-                            //Text(msg.filename)
-                            //HStack {
+
                             VideoPlayer(player: AVPlayer(url:  URL(string: msg.url)!))
                                 .frame(height: 205)
                                 .padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
@@ -131,23 +139,15 @@ struct ChatView: View {
                                         .fill(Color(hex: "\(sender?.displayColor ?? "#FF0000")"))
                                         .frame(width: 2), alignment: .leading
                                 )
-
-                            //        }
-                                //.padding(EdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 0))
-                                //.overlay(
-                                // Rectangle()
-                                //        .fill(Color.pink)
-                                //       .frame(width: 2), alignment: .leading
-                                //)
-                            
                         }
                     }
                 }
                 .padding(10)
             }
             
-            
+            /* Textbox for typing and sending message */
             HStack {
+                /* Button that goes to the ImageUploadView */
                 Button(action: {
                     self.global.currentView = "imagePicker"
                 }, label: {
@@ -165,11 +165,11 @@ struct ChatView: View {
                     
                 Button(action: {
                     let uuid = UUID().uuidString
-                    
                     let dateFormatter = ISO8601DateFormatter()
                     let dateNow = Date()
                     let isoDateString = dateFormatter.string(from: dateNow)
                     
+                    /* Send the message with the payload from the TextField */
                     socket.emit("on_message", [
                         "_id": uuid,
                         "type": "text",
@@ -194,8 +194,6 @@ struct ChatView: View {
                     .fill(Color.gray .opacity(0.2))
                     .frame(height: 1), alignment: .top
             )
-            
-            //Spacer()
         }
         .background(Color.white)
     }

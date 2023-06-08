@@ -8,6 +8,19 @@
 import Foundation
 import SwiftUI
 
+/*
+ 
+ This function takes a UIImage and returns a completion.
+ The function makes a POST request to the file bucket endpoint.
+ Once the image is successfully uploaded, the file bucket API will
+ return the URL string of the file. That URL string will be returned
+ by the function if the completion is fulfilled. If the completion
+ is rejected, nil will be returned.
+ 
+ Source: https://sebastianroy.de/sending-an-image-as-post-request-with-swift-5-to-go-119-server/
+ 
+ */
+
 func uploadImage(image: UIImage, completion: @escaping (String?) -> Void) {
     // "https://files.copager.com/upload"
     guard let imageData = image.toData() else { return }
@@ -24,6 +37,9 @@ func uploadImage(image: UIImage, completion: @escaping (String?) -> Void) {
         var data = Data()
         let fileName = "file.jpg"
         
+        /*
+         Append to the data object the headers for the file bucket to understand
+         */
         data.append("\r\n--\(boundary)\r\n".data(using: .utf8)!)
         data.append("Content-Disposition: form-data; name=\"file\"; filename=\"\(fileName)\"\r\n".data(using: .utf8)!)
         data.append("Content-Type: image/jpeg\r\n\r\n".data(using: .utf8)!)

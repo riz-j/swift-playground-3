@@ -8,6 +8,16 @@
 import Foundation
 import SwiftUI
 
+/*
+ 
+ This extension for the Swift Color object is used to convert a
+ color hex string (#FF0000) to a native Swift color object that
+ the Swift compiler can process.
+ 
+ Source: https://stackoverflow.com/questions/56874133/use-hex-color-in-swiftui
+ 
+ */
+
 extension Color {
     init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)

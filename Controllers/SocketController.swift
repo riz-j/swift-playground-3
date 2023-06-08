@@ -25,10 +25,7 @@ final class Service: ObservableObject {
                 //"LAN_ROOM": "PUBLIC_LAN__49"
             ])
     ])
-     
-    
-    
-    
+
     @Published var Messages = [Message]()
     @Published var messages = [String]()
     @Published var dataStore = DataStore()

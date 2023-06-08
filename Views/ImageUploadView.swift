@@ -43,7 +43,8 @@ struct ImageUploadView: View {
                     Button("Cancel", action: {
                         self.global.currentView = "chat"
                     })
-                    Button("Save", action: save)
+                    Spacer()
+                    Button("Send", action: save)
                 }
             }
         }

@@ -19,9 +19,8 @@ final class Service: ObservableObject {
             .log(true),
             .compress,
             .connectParams([
-                "USER_ID": UserDefaults.standard.string(forKey: "USER_ID")!,
-                "LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM")!
-                
+                "USER_ID": UserDefaults.standard.string(forKey: "USER_ID") ?? UUID().uuidString,
+                "LAN_ROOM": UserDefaults.standard.string(forKey: "PUB_LAN_ROOM") ?? "PUBLIC_LAN__118"
                 //"USER_ID": "j23n41-n3j2n1-4jn3j1-23n1j2",
                 //"LAN_ROOM": "PUBLIC_LAN__49"
             ])

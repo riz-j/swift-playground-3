@@ -97,7 +97,7 @@ struct ChatView: View {
                                     case .success(let image):
                                         image.resizable()
                                             .aspectRatio(contentMode: .fit)
-                                            .frame(height: UIScreen.main.bounds.height * 0.4)
+                                            .frame(height: UIScreen.main.bounds.height * 0.2)
                                     case .empty:
                                         Text("Loading Image...")
                                     case .failure(_):
@@ -145,7 +145,9 @@ struct ChatView: View {
                 Button(action: {
                     self.global.currentView = "imagePicker"
                 }, label: {
-                    Text("Upload Image")
+                    Image(systemName: "photo")
+                        .font(.title2)
+                        
                 })
 
                 

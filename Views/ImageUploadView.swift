@@ -33,11 +33,20 @@ struct ImageUploadView: View {
             VStack {
                 ZStack {
                     Rectangle()
-                        .fill(.secondary)
+                        .fill(.white)
                     
-                    Text("Tap to select a picture")
-                        .foregroundColor(.white)
-                        .font(.headline)
+                    VStack {
+                        Image(systemName: "photo")
+                            .font(.largeTitle)
+                            .foregroundColor(.blue)
+                        HStack {
+                            Image(systemName: "hand.tap.fill")
+                                .foregroundColor(.black)
+                            Text("Tap to select a picture")
+                                .foregroundColor(.black)
+                                .font(.headline)
+                        }
+                    }
                     
                     image?
                         .resizable()
